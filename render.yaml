@@ -1,0 +1,20 @@
+databases:
+  - name: catsalon-db
+    databaseName: catsalon
+    user: catsalon
+
+services:
+  - type: web
+    name: catsalon
+    runtime: python3
+    buildCommand: "./build.sh"
+    startCommand: "gunicorn catsaloon.catsalon.wsgi:application"
+    envVars:
+      - key: DATABASE_URL
+        fromDatabase:
+          name: catsalon-db
+          property: connectionString
+      - key: SECRET_KEY
+        generateValue: true
+      - key: WEB_CONCURRENCY
+        value: 4
