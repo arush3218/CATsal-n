@@ -7,7 +7,7 @@ services:
   - type: web
     name: catsalon
     runtime: python3
-    buildCommand: "./build.sh"
+    buildCommand: "pip install -r requirements.txt && python catsaloon/manage.py collectstatic --no-input && python catsaloon/manage.py migrate"
     startCommand: "gunicorn catsaloon.catsalon.wsgi:application"
     envVars:
       - key: DATABASE_URL
