@@ -97,7 +97,7 @@ def room(request, pk):
         room.participants.add(request.user)
         return redirect('room', pk=room.id)
     
-    context = {'room': room, 'room_messages': room_messages, 'particiapnts': participants}
+    context = {'room': room, 'room_messages': room_messages, 'participants': participants}
         
     return render(request, 'base/room.html', context)
 
@@ -151,22 +151,24 @@ def updateRoom(request, pk):
     context = {'form': form, 'topics': topics, 'room': room}
     return render(request, 'base/room_form.html', context)
 
+@login_required(login_url='login')
 def DeleteRoom(request, pk):
     room = Room.objects.get(id=pk)
     if request.user != room.host :
         return HttpResponse('You are not allowed here!')
     if request.method == 'POST':
         room.delete()
-        redirect('home')
+        return redirect('home')
     return render(request, 'base/delete.html',{'obj':room})
 
+@login_required(login_url='login')
 def DeleteMessage(request, pk):
     message = Message.objects.get(id=pk)
     if request.user != message.user :
         return HttpResponse('You are not allowed here!')
     if request.method == 'POST':
         message.delete()
-        redirect('home')
+        return redirect('home')
     return render(request, 'base/delete.html',{'obj':message})
 
 @login_required(login_url='login')

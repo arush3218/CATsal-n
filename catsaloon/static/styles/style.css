@@ -1,23 +1,28 @@
-@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&family=Poppins:wght@300;400;500;600;700&display=swap");
 
 :root {
-  --color-main: #71c6dd;
-  --color-main-light: #e1f6fb;
-  --color-dark: #3f4156;
-  --color-dark-medium: #51546e;
-  --color-dark-light: #696d97;
-  --color-light: #e5e5e5;
+  --color-main: #ff6b9d;
+  --color-main-light: #ffc6dc;
+  --color-secondary: #c44569;
+  --color-accent: #9b59b6;
+  --color-dark: #1a1a2e;
+  --color-dark-medium: #16213e;
+  --color-dark-light: #0f3460;
+  --color-light: #eaeaea;
   --color-gray: #8b8b8b;
   --color-light-gray: #b2bdbd;
-  --color-bg: #2d2d39;
+  --color-bg: #0f0e17;
   --color-success: #5dd693;
   --color-error: #fc4b0b;
+  --gradient-primary: linear-gradient(135deg, #ff6b9d 0%, #c44569 100%);
+  --gradient-secondary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient-accent: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
 }
 
 /*========== base styles ==========*/
 
 * {
-  font-family: "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
+  font-family: "Poppins", "DM Sans", -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Oxygen, Ubuntu, Cantarell, "Open Sans",
     "Helvetica Neue", sans-serif;
   margin: 0;
   padding: 0;
@@ -25,6 +30,27 @@
   text-rendering: optimizeLegibility;
   /* color: inherit; */
   font-size: inherit;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-10px); }
+}
+
+@keyframes glow {
+  0%, 100% { box-shadow: 0 0 20px rgba(255, 107, 157, 0.3); }
+  50% { box-shadow: 0 0 30px rgba(255, 107, 157, 0.6); }
+}
+
+@keyframes slideIn {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 html {
@@ -48,8 +74,24 @@ body {
   font-weight: 400;
   font-size: 1.5rem;
   color: var(--color-light-gray);
-  background-color: var(--color-bg);
+  background: linear-gradient(135deg, #0f0e17 0%, #1a1a2e 50%, #16213e 100%);
+  background-attachment: fixed;
   min-height: 100vh;
+  position: relative;
+  overflow-x: hidden;
+}
+
+body::before {
+  content: "";
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: radial-gradient(circle at 20% 50%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
+              radial-gradient(circle at 80% 80%, rgba(196, 69, 105, 0.1) 0%, transparent 50%);
+  pointer-events: none;
+  z-index: 0;
 }
 
 img {
@@ -67,6 +109,8 @@ a {
   max-width: 120rem;
   width: 90%;
   margin: auto;
+  position: relative;
+  z-index: 1;
 }
 
 .btn {
@@ -78,9 +122,26 @@ a {
   cursor: pointer;
   transition: all ease-in-out 0.3s;
   padding: 1rem 2rem;
-  border-radius: 5px;
-  box-shadow: 1px 1px 3px 1px rgba(0, 0, 0, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
   font-weight: 500;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+  transition: left 0.5s;
+}
+
+.btn:hover::before {
+  left: 100%;
 }
 
 .btn--link {
@@ -92,20 +153,31 @@ a {
 
 .btn--link:hover {
   text-decoration: underline;
+  color: var(--color-main-light);
 }
 
 .btn--main {
-  background-color: var(--color-main);
-  color: var(--color-dark);
+  background: var(--gradient-primary);
+  color: white;
+  font-weight: 600;
+  border: none;
+  animation: glow 3s infinite;
+}
+
+.btn--main:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(255, 107, 157, 0.4);
 }
 
 .btn:hover {
-  opacity: 0.9;
+  transform: translateY(-2px);
 }
 
 .btn--dark {
-  background-color: var(--color-dark-light);
+  background: rgba(26, 26, 46, 0.8);
+  backdrop-filter: blur(10px);
   color: var(--color-light);
+  border: 1px solid rgba(255, 107, 157, 0.2);
 }
 
 .btn > svg {
@@ -118,10 +190,20 @@ a {
   border-radius: 10rem;
   font-size: 1.4rem;
   font-weight: 700;
-  padding: 6px 2.5rem;
+  padding: 8px 2.5rem;
   color: var(--color-main);
-  background: transparent;
+  background: rgba(255, 107, 157, 0.1);
   border: 2px solid var(--color-main);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.btn--pill:hover {
+  background: var(--gradient-primary);
+  color: white;
+  border-color: transparent;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(255, 107, 157, 0.3);
 }
 
 .action-button {
@@ -136,6 +218,14 @@ a {
   display: inline-block;
   border-radius: 50%;
   border: 2px solid var(--color-main);
+  background: linear-gradient(135deg, var(--color-main), var(--color-main-light));
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 600;
+  text-transform: uppercase;
+  overflow: hidden;
 }
 
 .avatar img {
@@ -143,6 +233,8 @@ a {
   border-radius: 50%;
   object-fit: cover;
   object-position: center;
+  width: 100%;
+  height: 100%;
 }
 
 .avatar::after {
@@ -159,6 +251,12 @@ a {
   background-color: var(--color-success);
 }
 
+.avatar.avatar--small {
+  width: 2.8rem;
+  height: 2.8rem;
+  font-size: 1.2rem;
+}
+
 .avatar.avatar--small img {
   width: 2.8rem;
   height: 2.8rem;
@@ -169,6 +267,12 @@ a {
   height: 0.7rem;
   bottom: 0px;
   right: -6px;
+}
+
+.avatar.avatar--medium {
+  width: 3.6rem;
+  height: 3.6rem;
+  font-size: 1.4rem;
 }
 
 .avatar.avatar--medium img {
@@ -182,6 +286,12 @@ a {
   height: 0.7rem;
   bottom: 0px;
   right: -6px;
+}
+
+.avatar.avatar--large {
+  width: 8rem;
+  height: 8rem;
+  font-size: 3rem;
 }
 
 .avatar.avatar--large img {
@@ -267,7 +377,13 @@ a {
 
 .header {
   padding: 1.5rem;
-  background-color: var(--color-dark);
+  background: rgba(26, 26, 46, 0.7);
+  backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 107, 157, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
 }
 
 .header > .container {
@@ -283,30 +399,45 @@ a {
 }
 
 .header__logo > img {
-  height: 3.2rem;
-  width: 3.2rem;
+  height: 3.6rem;
+  width: 3.6rem;
+  animation: float 3s ease-in-out infinite;
+  filter: drop-shadow(0 0 10px rgba(255, 107, 157, 0.5));
 }
 
 .header__logo > h1 {
   font-weight: 700;
-  font-size: 2rem;
-  color: var(--color-light);
+  font-size: 2.2rem;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  letter-spacing: 1px;
 }
 
 .header__search > label {
-  background-color: var(--color-dark-medium);
-  padding: 1.3rem 1rem;
+  background: rgba(255, 255, 255, 0.05);
+  padding: 1.3rem 2rem;
   display: flex;
   align-items: center;
   gap: 1rem;
-  border-radius: 4px;
+  border-radius: 50px;
+  border: 1px solid rgba(255, 107, 157, 0.2);
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+
+.header__search > label:focus-within {
+  border-color: var(--color-main);
+  box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .header__search svg {
-  fill: var(--color-gray);
+  fill: var(--color-main);
   width: 2rem;
   height: 2rem;
-  margin-left: 1rem;
+  margin-left: 0;
 }
 
 .header__search input {
@@ -315,6 +446,11 @@ a {
   border: none;
   outline: none;
   color: var(--color-light);
+  font-size: 1.4rem;
+}
+
+.header__search input::placeholder {
+  color: var(--color-gray);
 }
 
 @media screen and (max-width: 800px) {
@@ -391,6 +527,7 @@ a {
 
 .layout {
   margin-top: 2.4rem;
+  min-height: calc(100vh - 8rem);
 }
 
 .layout > .container {
@@ -425,14 +562,15 @@ a {
   width: 90%;
   max-width: 48rem;
   min-height: 40rem;
-  position: absolute;
+  position: fixed;
   top: 50%;
   left: 50%;
-  transform: translate(-50%, -46%);
+  transform: translate(-50%, -50%);
   background-color: var(--color-dark);
   border-radius: 1rem;
   box-shadow: 1px 1px 6px 3px rgba(0, 0, 0, 0.1);
   overflow: hidden;
+  z-index: 101;
 }
 
 .layout__boxHeader {
@@ -497,36 +635,43 @@ a {
 .form__group input,
 .form__group textarea,
 .form__group select {
-  background: transparent;
-  border: 1px solid var(--color-dark-light);
-  padding: 1rem;
-  border-radius: 3px;
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid rgba(255, 107, 157, 0.2);
+  padding: 1.2rem 1.5rem;
+  border-radius: 12px;
   width: 100%;
   color: var(--color-light);
   font-weight: 500;
   outline: none;
+  transition: all 0.3s ease;
+  backdrop-filter: blur(10px);
 }
 
 .form__group input:focus,
-.form__group textarea:focus {
+.form__group textarea:focus,
+.form__group select:focus {
   border-color: var(--color-main);
+  background: rgba(255, 255, 255, 0.08);
+  box-shadow: 0 0 20px rgba(255, 107, 157, 0.2);
+  transform: translateY(-2px);
 }
 
 .form__group textarea {
-  background: transparent;
-  height: 10rem;
+  background: rgba(255, 255, 255, 0.05);
+  height: 12rem;
   resize: none;
 }
 
 .form__group select {
-  color: var(--color-gray);
+  color: var(--color-light);
   font-weight: 400;
+  cursor: pointer;
 }
 
 .form__group select option {
-  background-color: var(--color-dark-light);
+  background-color: var(--color-dark);
   color: var(--color-light);
-  padding: 0 10rem;
+  padding: 1rem;
 }
 
 .form__action {
@@ -642,9 +787,37 @@ a {
 
 .roomListRoom {
   margin-bottom: 2.4rem;
-  background-color: var(--color-dark);
-  border-radius: 1rem;
-  padding: 2rem;
+  background: rgba(26, 26, 46, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
+  padding: 2.5rem;
+  border: 1px solid rgba(255, 107, 157, 0.1);
+  transition: all 0.3s ease;
+  animation: slideIn 0.5s ease-out;
+  position: relative;
+  overflow: hidden;
+}
+
+.roomListRoom::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 4px;
+  height: 100%;
+  background: var(--gradient-primary);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.roomListRoom:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 10px 40px rgba(255, 107, 157, 0.2);
+  border-color: var(--color-main);
+}
+
+.roomListRoom:hover::before {
+  opacity: 1;
 }
 
 .roomListRoom__header {
@@ -658,6 +831,7 @@ a {
   display: flex;
   align-items: center;
   gap: 1rem;
+  color: var(--color-light);
 }
 
 .roomListRoom__actions {
@@ -670,33 +844,43 @@ a {
 .roomListRoom__actions span {
   font-size: 1.4rem;
   font-weight: 500;
+  color: var(--color-main-light);
 }
 
 .roomListRoom__actions svg {
   fill: var(--color-main);
-
   width: 1.6rem;
   height: 1.6rem;
+  transition: transform 0.3s ease;
+}
+
+.roomListRoom__actions svg:hover {
+  transform: scale(1.2);
 }
 
 .roomListRoom__content {
-  margin: 1rem 0;
+  margin: 1.5rem 0;
 }
 
 .roomListRoom__content a {
   font-size: 2rem;
-  font-weight: 500;
+  font-weight: 600;
   margin-bottom: 1.5rem;
   color: var(--color-light);
   transition: all 0.3s ease-in-out;
+  display: inline-block;
 }
 
 .roomListRoom__content a:hover {
-  color: var(--color-main);
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  transform: translateX(5px);
 }
 
 .roomListRoom__meta {
-  border-top: 1px solid var(--color-dark-medium);
+  border-top: 1px solid rgba(255, 107, 157, 0.1);
   padding-top: 1rem;
   display: flex;
   align-items: center;
@@ -719,11 +903,13 @@ a {
 }
 
 .roomListRoom__topic {
-  padding: 5px 1.5rem;
-  background-color: var(--color-dark-medium);
+  padding: 8px 2rem;
+  background: var(--gradient-primary);
   border-radius: 5rem;
-  font-weight: 500;
+  font-weight: 600;
   font-size: 1.3rem;
+  color: white;
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
 }
 
 /*==============================
@@ -731,15 +917,18 @@ a {
 ================================*/
 
 .activities {
-  background: var(--color-dark);
-  border-radius: 5px;
+  background: rgba(26, 26, 46, 0.5);
+  backdrop-filter: blur(10px);
+  border-radius: 20px;
   overflow: hidden;
+  border: 1px solid rgba(255, 107, 157, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .activities__header h2 {
-  background-color: var(--color-dark-light);
+  background: var(--gradient-primary);
   text-transform: uppercase;
-  font-weight: 500;
+  font-weight: 600;
   padding: 1rem 1.5rem;
   color: var(--color-light);
   letter-spacing: 1px;
@@ -900,11 +1089,14 @@ a {
 
 .room,
 .participants {
-  background: var(--color-dark);
+  background: rgba(26, 26, 46, 0.5);
+  backdrop-filter: blur(10px);
   max-height: 87.5vh;
-  border-radius: 0.7rem;
+  border-radius: 20px;
   overflow: hidden;
   position: relative;
+  border: 1px solid rgba(255, 107, 157, 0.1);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 @media screen and (max-width: 900px) {
@@ -919,11 +1111,11 @@ a {
 
 .room__top,
 .participants__top {
-  background: var(--color-dark-light);
+  background: var(--gradient-primary);
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1rem 2rem;
+  padding: 1.5rem 2rem;
   position: relative;
 }
 
@@ -1006,17 +1198,21 @@ a {
 }
 
 .room__info h3 {
-  font-size: 2.4rem;
-  font-weight: 500;
-  color: var(--color-main);
+  font-size: 2.6rem;
+  font-weight: 700;
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .room__hosted p {
   text-transform: uppercase;
-  color: var(--color-gray);
+  color: var(--color-main);
   font-size: 1.2rem;
   font-weight: 700;
   line-height: 2;
+  letter-spacing: 1px;
 }
 
 .room__author {
@@ -1025,20 +1221,25 @@ a {
   align-items: center;
   margin-bottom: 1rem;
   transition: all 0.3s ease-in-out;
+  padding: 1rem;
+  border-radius: 12px;
 }
 
 .room__author:hover {
-  text-decoration: underline;
+  background: rgba(255, 107, 157, 0.1);
+  transform: translateX(5px);
 }
 
 .room__topics {
-  padding: 0.5rem 1.5rem;
-  background: var(--color-dark-light);
-  color: var(--color-light);
+  padding: 0.8rem 2rem;
+  background: var(--gradient-primary);
+  color: white;
   display: inline-block;
   font-size: 1.4rem;
-  border-radius: 1.5rem;
+  font-weight: 600;
+  border-radius: 50px;
   margin: 1rem 0;
+  box-shadow: 0 4px 15px rgba(255, 107, 157, 0.3);
 }
 
 .room__conversation {
@@ -1054,19 +1255,31 @@ a {
 }
 
 .threads {
-  background: var(--color-bg);
-  border-radius: 0.7rem;
+  background: rgba(26, 26, 46, 0.4);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 107, 157, 0.1);
+  border-radius: 20px;
   overflow-y: auto;
   height: 100%;
   margin-top: 28vh;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
   padding: 0 2rem 4rem 2rem;
 }
 
 .thread {
-  border-left: 2px solid var(--color-dark);
-  padding-left: 1rem;
+  border-left: 3px solid transparent;
+  border-image: var(--gradient-primary) 1;
+  padding-left: 2rem;
   margin: 2rem 0;
   padding: 2rem;
+  background: rgba(255, 255, 255, 0.03);
+  border-radius: 12px;
+  transition: all 0.3s ease;
+}
+
+.thread:hover {
+  background: rgba(255, 107, 157, 0.05);
+  transform: translateX(5px);
 }
 
 .thread__top {
@@ -1076,7 +1289,12 @@ a {
 }
 
 .thread__top svg {
-  fill: var(--color-dark-light);
+  fill: var(--color-main);
+  transition: transform 0.3s ease;
+}
+
+.thread__top svg:hover {
+  transform: scale(1.2) rotate(90deg);
 }
 
 .thread__author {
@@ -1084,17 +1302,25 @@ a {
   align-items: center;
   gap: 1.5rem;
   font-size: 1.4rem;
+  color: var(--color-light);
 }
 
 .thread__authorInfo {
   display: flex;
   align-items: center;
   gap: 1rem;
+  transition: all 0.3s ease;
+}
+
+.thread__authorInfo:hover {
+  color: var(--color-main);
 }
 
 .thread__details {
-  font-size: 1.4rem;
-  margin-top: 0.5rem;
+  font-size: 1.5rem;
+  margin-top: 1rem;
+  color: var(--color-light-gray);
+  line-height: 1.8;
 }
 
 .room__message {
@@ -1104,23 +1330,36 @@ a {
   bottom: 0;
   left: 0;
   right: 0;
-  background: transparent;
+  background: rgba(15, 14, 23, 0.9);
+  backdrop-filter: blur(20px);
+  border-top: 1px solid rgba(255, 107, 157, 0.2);
 }
 
 .room__message > form > input {
   resize: none;
-  background-color: var(--color-dark-light);
+  background: rgba(255, 255, 255, 0.05);
   color: var(--color-light);
-  border: none;
+  border: 2px solid rgba(255, 107, 157, 0.3);
   outline: none;
-  border-radius: 0.7rem;
-  height: 4.5rem;
+  border-radius: 50px;
+  height: 5rem;
   width: 100%;
   margin-top: -1rem;
-  padding: 1.2rem;
+  padding: 1.5rem 2.5rem;
   font-size: 1.4rem;
   font-weight: 500;
   position: relative;
+  transition: all 0.3s ease;
+}
+
+.room__message > form > input:focus {
+  border-color: var(--color-main);
+  box-shadow: 0 0 20px rgba(255, 107, 157, 0.3);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.room__message > form > input::placeholder {
+  color: var(--color-gray);
 }
 
 .room__message > form > input::placeholder {
@@ -1128,9 +1367,10 @@ a {
 }
 
 .participants__top span {
-  color: var(--color-main);
+  color: white;
   font-size: 1.3rem;
   text-transform: none;
+  font-weight: 600;
 }
 
 .participants__top {
@@ -1150,16 +1390,27 @@ a {
   align-items: center;
   gap: 1.5rem;
   margin-bottom: 2rem;
+  padding: 1rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
+  border: 1px solid transparent;
+}
+
+.participant:hover {
+  background: rgba(255, 107, 157, 0.1);
+  border-color: rgba(255, 107, 157, 0.3);
+  transform: translateX(5px);
 }
 
 .participant p {
-  color: var(--color-light-gray);
-  line-height: 1.2;
+  color: var(--color-light);
+  line-height: 1.4;
+  font-weight: 500;
 }
 
 .participant span {
   display: block;
-  font-weight: 500;
+  font-weight: 600;
   color: var(--color-main);
-  font-weight: 1.4rem;
+  font-size: 1.3rem;
 }

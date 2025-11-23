@@ -13,9 +13,7 @@
     {% endif %}
 
     <div class="avatar avatar--small">
-      <img
-        src="https://m.media-amazon.com/images/I/911EuqYM1LL._AC_UF1000,1000_QL80_.jpg"
-      />
+      {{ room.host.username|slice:":2"|upper }}
     </div>
     <span>@{{ room.host.username }}</span>
   </div>

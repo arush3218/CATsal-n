@@ -28,9 +28,7 @@
       <div class="header__user">
         <a href="{% url 'update_user' %}">
           <div class="avatar avatar--medium active">
-            <img
-              src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtqBxBMtbKy8_02Vju6QKRt5HzaMbg1W2Cmg&s"
-            />
+            {{ request.user.username|slice:":2"|upper }}
           </div>
           <p>
             {{ request.user.username }}
